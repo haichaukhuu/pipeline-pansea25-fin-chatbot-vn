@@ -1,0 +1,34 @@
+# Core dependencies
+asyncio-throttle
+httpx
+beautifulsoup4
+lxml
+
+# AWS services
+boto3
+botocore
+
+# Data processing
+pandas
+numpy
+
+# Text processing
+nltk
+spacy
+
+# Async support
+aiofiles
+asyncio
+
+# Configuration
+python-dotenv
+pydantic
+
+# Utilities
+tenacity
+python-slugify
+
+# Development
+pytest
+pytest-asyncio
+black
