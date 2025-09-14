@@ -1,0 +1,42 @@
+name: Weekly Data Pipeline
+
+on:
+  schedule:
+    # Run every Monday at 2 AM UTC 
+    - cron: '0 2 * * 1'
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-southeast-2
+
+    - name: Run data pipeline
+      run: python main.py
+
+    - name: Archive logs
+      if: always()  # Run even if the previous step fails
+      uses: actions/upload-artifact@v2
+      with:
+        name: pipeline-logs
+        path: pipeline.log
